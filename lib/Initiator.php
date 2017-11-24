@@ -13,14 +13,10 @@ class Initiator extends \Controller_Addon {
             ->setBaseURL('../shared/apps/xavoc/');
         }
 
-        $m = $this->app->top_menu->addMenu('All Samaj');
-        $m->addItem(['All Samaj','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_samaj');
-        $m->addItem(['Slider','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_slider');
-        // $m->addItem(['News','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_news');
-        // $m->addItem(['Committee','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_committee');
-        // $m->addItem(['Member','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_member');
-        // $m->addItem(['Committee Member','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_committeemember');
-        $m->addItem(['Location Management','icon'=>' fa fa-file-image-o'],'xavoc_allsamaj_location');
+        $m = $this->app->top_menu->addMenu('Global');
+        $m->addItem(['Student','icon'=>' fa fa-cog'],'xavoc_formwala_student');
+        $m->addItem(['Course','icon'=>' fa fa-cog'],'xavoc_formwala_course');
+        $m->addItem(['College','icon'=>' fa fa-cog'],'xavoc_formwala_college');
         
     	return $this;
     }
