@@ -8,6 +8,6 @@ class page_student extends \xepan\base\Page{
 			parent::init();
 
 			$crud = $this->add('xepan\hr\CRUD');
-			$crud->setModel('xavoc\formwala\Student');
+			$crud->setModel('xavoc\formwala\Applicant');
 		}	
 }
