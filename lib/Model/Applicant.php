@@ -10,7 +10,7 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 					'InActive'=> ['view','edit','delete','activate']
 					];
 
-	public $type = "Student";
+	public $type = "Applicant";
 	public $acl_type = "formwala_applicant";
 
 	function init(){
@@ -112,5 +112,7 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 
 		$this->getElement('address')->caption('Permanent Address');
 		$this->getElement('status')->defaultValue('Active');
+
+		$this->addCondition('type','Applicant');
 	}
 }
