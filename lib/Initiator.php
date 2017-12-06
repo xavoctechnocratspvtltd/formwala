@@ -13,10 +13,10 @@ class Initiator extends \Controller_Addon {
             ->setBaseURL('../shared/apps/xavoc/');
         }
 
-        $m = $this->app->top_menu->addMenu('Global');
-        $m->addItem(['Student','icon'=>' fa fa-cog'],'xavoc_formwala_student');
+        $m = $this->app->top_menu->addMenu('Formwala');
         $m->addItem(['Course','icon'=>' fa fa-cog'],'xavoc_formwala_course');
         $m->addItem(['College','icon'=>' fa fa-cog'],'xavoc_formwala_college');
+        $m->addItem(['Student','icon'=>' fa fa-cog'],'xavoc_formwala_student');
         
     	return $this;
     }
