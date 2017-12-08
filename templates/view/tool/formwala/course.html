@@ -1,0 +1,9 @@
+
+<div id="{$_name}" style="{$style}" class="{$class} row xepan-formwala-course-section">{rows}{row}
+  <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 text-center formwala-course-single"><a href="{$url}"><img src="{$image}" alt="{$name}"/>
+      <h3>{$name}</h3></a></div>{/}{/}
+  {not_found}
+  <div role="alert" class="full-width alert alert-warning"><strong class="glyphicon glyphicon-warning-sign">&nbsp;Warning!<span>&nbsp;{$not_found_message}</span></strong></div>{/}
+  {paginator_wrapper}
+  <div style="float:none; clear:both" class="xepan-formwala-course-paginator">{$Paginator}</div>{/}
+</div>

@@ -1,0 +1,16 @@
+div(id='{$_name}' class="{$class} row xepan-formwala-course-section" style="{$style}" )
+	{rows}{row}
+	.col-md-3.col-sm-12.col-xs-12.col-lg-3.text-center.formwala-course-single
+		a(href="{$url}")
+			img(src="{$image}" alt="{$name}")
+			h3 {$name}
+	{/}{/}
+	{not_found}
+	div.full-width.alert.alert-warning(role="alert")
+		strong.glyphicon.glyphicon-warning-sign &nbsp;Warning!
+			span &nbsp;{$not_found_message}
+	{/}
+	{paginator_wrapper}
+	.xepan-formwala-course-paginator(style='float:none; clear:both')
+		{$Paginator}
+	{/}

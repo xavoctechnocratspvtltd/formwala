@@ -18,8 +18,12 @@ class Model_Course extends \xepan\base\Model_Table{
 		$this->addField('name');
 		$this->addField('status')->enum(['Active','InActive'])->defaultValue('Active');
 
+		$this->add('xepan\filestore\Field_Image','image_id');
+
 		$this->hasMany('xavoc\formwala\CollegeCourseAssociation','course_id');
 		
+		// $this->add('dynamic_model/Controller_AutoCreator');
+
 		// $this->addHook('beforeSave',$this);
 		$this->is(['name|to_trim|required|unique']);
 	}
