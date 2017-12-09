@@ -1,5 +1,25 @@
 
 <div id="{$_name}" for-xepan-component="xavoc/formwala/Tool_Login" class="xepan-tool-options">
+  <div class="xepan-cms-group-panel clearfix">
+    <div id="collapse-formwala-login" class="xepan-cms-tools-bar-panel row-fluid collapse in">
+      <div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
+        <div id="xepan-cms-groups-panel" class="xepan-cms-groups-panel collapse in"></div>
+        <div class="xepan-cms-group-panel clearfix">
+          <div data-toggle="collapse" data-target="#formwala-login-option" aria-expanded="false" class="panel panel-heading panel-primary collapsed"><span>Page Link</span><i class="fa fa-chevron-down pull-right"></i></div>
+        </div>
+        <div id="formwala-login-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
+          <table class="table table-condensed table-hover xepan-cms-tool-table">
+            <tr class="xepan-tool-option">
+              <td class="xepan-tool-option-title">Account Page</td>
+              <td class="xepan-tool-option-value">
+                <input id="account_page" data-attr="account_page"/>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="text/javascript">
     $('\#{$_name} [data-attr]').on('change',function(){
     	$(current_selected_component).attr($(this).data('attr'),$(this).val());

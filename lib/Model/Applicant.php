@@ -33,6 +33,7 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 		$stu_j->addField('middle_name');
 
 		$stu_j->addField('mobile_no');
+		
 		$stu_j->addField('email_id');
 		$stu_j->addField('dob')->caption('Date of Birth');
 		$stu_j->addField('gender')->enum(['Male','Female','Other']);
@@ -114,5 +115,11 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 		$this->getElement('status')->defaultValue('Active');
 
 		$this->addCondition('type','Applicant');
+
+		$this->addHook('beforeSave',$this,[],4);
+	}
+
+	function beforeSave(){
+		if(!$this['first_name']) $this['first_name'] = "Guest";
 	}
 }

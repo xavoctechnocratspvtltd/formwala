@@ -4,8 +4,9 @@ namespace xavoc\formwala;
 
 class Tool_Applicationform extends \xepan\cms\View_Tool{
 	public $options = [
-
+			'login_page'=>'login'
 		];
+
 	public $course;
 
 	function init(){
@@ -18,6 +19,7 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 			$this->add('View')->addClass('alert alert-warning')->set('Course is not defined');
 			return;
 		}
+		
 
 		$model = $this->add('xavoc\formwala\Model_Course');
 		$model->addCondition('id',$course);
@@ -30,6 +32,10 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		}
 
 		// check student is login
+		if(!$this->app->auth->isLoggedIn()){
+			$this->app->redirect($this->app->url($this->options['login_page'],['course_id'=>$course]));
+		}
+
 		// if not login then redirect to login page
 		// else show registration form
 
