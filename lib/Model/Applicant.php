@@ -18,16 +18,16 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 
 		$stu_j = $this->join('formwala_applicant.contact_id');
 
-		$stu_j->hasOne('xavoc\formwala\Course','course_id')->display(array('form' => 'xepan\commerce\DropDown'));
-		$stu_j->hasOne('xavoc\formwala\College','first_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
-		$stu_j->hasOne('xavoc\formwala\College','secord_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
-		$stu_j->hasOne('xavoc\formwala\College','third_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		// $stu_j->hasOne('xavoc\formwala\Course','course_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		// $stu_j->hasOne('xavoc\formwala\College','first_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		// $stu_j->hasOne('xavoc\formwala\College','secord_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
+		// $stu_j->hasOne('xavoc\formwala\College','third_college_id')->display(array('form' => 'xepan\commerce\DropDown'));
 
 		$stu_j->hasOne('xepan\base\Country','local_country_id')->display(array('form' => 'xepan\commerce\DropDown'));
 		$stu_j->hasOne('xepan\base\State','local_state_id')->display(array('form' => 'xepan\commerce\DropDown'));
 				
 		$stu_j->addField('local_city');
-		$stu_j->addField('local_address');
+		$stu_j->addField('local_address')->type('text');
 		$stu_j->addField('local_pin_code');
 
 		$stu_j->addField('middle_name');

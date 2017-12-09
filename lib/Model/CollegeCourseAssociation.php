@@ -8,7 +8,7 @@ class Model_CollegeCourseAssociation extends \xepan\base\Model_Table{
 	public $table = 'formwala_college_course_association';
 	public $status = [];
 	public $actions = [
-					'*'=>['view','edit','delete']
+					'All'=>['view','edit','delete']
 					];
 
 	function init(){
