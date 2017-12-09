@@ -3,7 +3,7 @@
 namespace xavoc\formwala;
 
 class Model_Course extends \xepan\base\Model_Table{
-	public $table = 'course';
+	public $table = 'formwala_course';
 	public $status = ['Active','InActive'];
 	public $actions = [
 					'Active'=> ['view','college_association','edit','delete','deactivate'],
