@@ -45,7 +45,17 @@ class Tool_Login extends \xepan\cms\View_Tool{
 				$applicant->tryLoadAny();
 				$applicant->save();
 
-				$this->js(null,$form->js()->univ()->successMessage("OTP:".$otp))->reload(['otp_send'=>true,'uid'=>$form['mobile_no'],'course'=>$course])->execute();
+				$message = $this->app->getConfig('otpMessage');
+
+				if($message){
+					$temp = $this->add('GiTemplate');
+					$temp->loadTemplateFromString($message);
+					$msg = $this->add('View',null,null,$temp);
+					$msg->template->trySetHTML('otp',$otp);
+					
+					$this->add('xepan\communication\Controller_Sms')->sendMessage($form['mobile_no'],$msg->getHtml());
+				}
+				$this->js(null)->reload(['otp_send'=>true,'uid'=>$form['mobile_no'],'course'=>$course])->execute();
 			}				
 		}else{
 			if(!$mobile_no){
