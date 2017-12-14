@@ -30,15 +30,6 @@ class Initiator extends \Controller_Addon {
         $this->app->exportFrontEndTool('xavoc\formwala\Tool_Course','FormWala');
         $this->app->exportFrontEndTool('xavoc\formwala\Tool_Login','FormWala');
         
-        $this->app->addHook('login_panel_user_loggedin',function($app,$user){
-
-            // $m = $this->add('xavoc\mlm\Model_Distributor');
-            // $m->loadLoggedIn('Customer');
-            // if($m->loaded()){
-            //     $this->app->redirect($this->app->url('applicationform'));
-            // }
-        });
-
     	return $this;
     }
 }
