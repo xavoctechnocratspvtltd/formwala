@@ -6,7 +6,7 @@ class Tool_Course extends \xepan\cms\View_Tool{
 	public $options = [
 			'account_page'=>'',
 			'type'=>'course',
-			'redirect_to_original_link'=>0
+			'redirect_to_original_link'=>false
 		];
 
 	function init(){
@@ -35,17 +35,21 @@ class Tool_Course extends \xepan\cms\View_Tool{
 
 	function addToolCondition_row_account_page($value,$l){
 		$url = $this->api->url($this->options['account_page'],['course'=>$l->model['id']]);
+
+		if($l->model['is_link'] && $this->options['redirect_to_original_link'])
+			$url = $l->model['link'];
+
 		$l->current_row_html['url'] = $url;
-		$l->current_row_html['target'] = "_self";
 	}
 
 	function addToolCondition_row_redirect_to_original_link($value,$l){
-		$url = $this->api->url($l->model['link']);
+		if(!$value){
+			return;
+		}
+		
+		$url = $l->model['link'];
 		$l->current_row_html['url'] = $url;
-		if($l->model['is_link'] && $this->options['redirect_to_original_link'])
-			$l->current_row_html['target'] = "_blank";
-		else
-			$l->current_row_html['target'] = "_self";
-	}
+		$l->current_row_html['target'] = "_blank";
 
+	}
 }
