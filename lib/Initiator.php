@@ -15,6 +15,7 @@ class Initiator extends \Controller_Addon {
 
         $m = $this->app->top_menu->addMenu('Formwala');
         $m->addItem(['Course','icon'=>' fa fa-cog'],'xavoc_formwala_course');
+        $m->addItem(['Link','icon'=>' fa fa-cog'],'xavoc_formwala_link');
         $m->addItem(['College','icon'=>' fa fa-cog'],'xavoc_formwala_college');
         $m->addItem(['Applicant','icon'=>' fa fa-cog'],'xavoc_formwala_student');
         

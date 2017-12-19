@@ -4,7 +4,9 @@ namespace xavoc\formwala;
 
 class Tool_Course extends \xepan\cms\View_Tool{
 	public $options = [
-			'account_page'=>'step1'
+			'account_page'=>'',
+			'type'=>'course',
+			'redirect_to_original_link'=>0
 		];
 
 	function init(){
@@ -13,6 +15,10 @@ class Tool_Course extends \xepan\cms\View_Tool{
 		if($this->owner instanceof \AbstractController) return;
 
 		$model = $this->add('xavoc\formwala\Model_Course');
+		$model->addCondition([['is_link',false],['is_link',null]]);
+		if($this->options['type'] == "link"){
+			$model = $this->add('xavoc\formwala\Model_Link');
+		}
 		$model->addCondition('status','Active');
 
 		$this->complete_lister = $cl = $this->add('CompleteLister',null,null,['view/tool/formwala/course']);
@@ -30,6 +36,16 @@ class Tool_Course extends \xepan\cms\View_Tool{
 	function addToolCondition_row_account_page($value,$l){
 		$url = $this->api->url($this->options['account_page'],['course'=>$l->model['id']]);
 		$l->current_row_html['url'] = $url;
+		$l->current_row_html['target'] = "_self";
+	}
+
+	function addToolCondition_row_redirect_to_original_link($value,$l){
+		$url = $this->api->url($l->model['link']);
+		$l->current_row_html['url'] = $url;
+		if($l->model['is_link'] && $this->options['redirect_to_original_link'])
+			$l->current_row_html['target'] = "_blank";
+		else
+			$l->current_row_html['target'] = "_self";
 	}
 
 }

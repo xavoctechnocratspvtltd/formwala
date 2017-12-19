@@ -45,8 +45,8 @@ class Tool_Login extends \xepan\cms\View_Tool{
 				$applicant->tryLoadAny();
 				$applicant->save();
 
-				$message = $this->app->getConfig('otpMessage');
-
+				$message = $this->app->getConfig('otpMessage','{$otp}, this is Your OTP.');
+				
 				if($message){
 					$temp = $this->add('GiTemplate');
 					$temp->loadTemplateFromString($message);

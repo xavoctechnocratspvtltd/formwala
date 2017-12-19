@@ -22,6 +22,8 @@ class Model_Course extends \xepan\base\Model_Table{
 
 		$this->hasMany('xavoc\formwala\CollegeCourseAssociation','course_id');
 		
+		$this->addField('is_link')->type('boolean');
+		$this->addField('link');
 		// $this->add('dynamic_model/Controller_AutoCreator');
 
 		// $this->addHook('beforeSave',$this);

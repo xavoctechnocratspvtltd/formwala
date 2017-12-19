@@ -16,7 +16,7 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 
 		$this->course = $course = trim($this->app->stickyGET('course'));
 		if(!strlen($course)){
-			$this->add('View')->addClass('alert alert-warning')->set('Course is not defined');
+			$this->add('View')->addClass('alert alert-warning')->set('Please Select Course first to proceed');
 			return;
 		}
 		
@@ -43,14 +43,17 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		if(!$active_step)
 			$active_step = 1;
 
-		$pb = $this->add('xepan\epanservices\View_ProgressBar',['active_step'=>$active_step]);
+		// $pb = $this->add('xepan\epanservices\View_ProgressBar',['active_step'=>$active_step]);
 
 		switch ($active_step) {
 			case '1':
 				$this->applicantForm();
 				break;
 			case '2':
-				$this->collegeSelectionForm();
+				if($model['is_link']){
+					$this->linkDisplay();
+				}else
+					$this->collegeSelectionForm();
 				break;
 			case '3':
 				$this->finalStep();
@@ -233,5 +236,11 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		$this->add('View')->set('Thank you')->addClass('alert alert-success');
 
 	}
+
+	function linkDisplay(){
+		$this->add('View')->addClass('text-center heading')->setElement('h2')->set("Select Your Link");
+		$this->add('xavoc\formwala\Tool_Course',['options'=>['type'=>'link','redirect_to_original_link'=>1]]);
+	}
+
 
 }
