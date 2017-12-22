@@ -16,7 +16,7 @@ class Model_College extends \xepan\base\Model_Contact{
 		parent::init();
 
 		$this->addCondition('type','College');
-		$this->addCondition('created_by_id',$this->app->auth->model->id);
+		// $this->addCondition('created_by_id',$this->app->auth->model->id);
 
 		// field to remove
 		$field_remove = ['assign_to_id','last_name','post','source','score','assign_at','freelancer_type','related_with','related_id','updated_at','image_id','remark'];
