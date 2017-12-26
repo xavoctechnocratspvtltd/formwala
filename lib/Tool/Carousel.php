@@ -43,7 +43,6 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		
 		$this->app->jquery->addStaticInclude('revolution/js/jquery.themepunch.tools.min');
 		$this->app->jquery->addStaticInclude('revolution/js/jquery.themepunch.revolution.min');
-		$this->app->jquery->addStaticInclude('owl.carousel.min');
 
 		$this->slide_count = 0;
 		$carousel_cl->addHook('formatRow',function($l){
@@ -58,6 +57,10 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 	}
 
 	function brandCarousel(){
+
+		$this->app->jquery->addStaticInclude('owl.carousel.min');
+		$this->js(true)->_css('owl.carousel');
+
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouselmulti']);
 		$carousel_cl->setModel($this->image_model);
 
@@ -68,6 +71,9 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 	}
 
 	function testimonial(){
+		$this->js(true)->_css('owl.carousel');
+		$this->app->jquery->addStaticInclude('owl.carousel.min');
+		
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouseltestimonial']);
 		$carousel_cl->setModel($this->image_model);
 
