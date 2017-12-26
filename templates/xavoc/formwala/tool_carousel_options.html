@@ -7,6 +7,16 @@
           <select id="{$_name}_dropdown" style="width:150px;" data-attr="carousel_category" class="chosen-select option-category"></select>
         </td>
     </tr>
+    <tr>
+      <td class="xepan-tool-option-title">Display Type</td>
+        <td colspan="2" class="xepan-tool-option-value">
+          <select id="{$_name}_type" style="width:150px;" data-attr="display_type">
+            <option value="slideshow">Slide Show</option>
+            <option value="brandCarousel">Brand Carousel</option>
+            <option value="testimonial">Testimonial</option>
+          </select>
+        </td>
+    </tr>
   </table>
   <script>
     $.ajax({

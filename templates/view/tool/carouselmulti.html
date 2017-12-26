@@ -1,0 +1,37 @@
+<div class="{$class} row" id="{$_name}" style="{$style}">
+	<div class="brand-carousel">
+	{rows}{row}
+		<div class="bran-logo">
+			<a href="#">
+				<img  alt="" src="{$file}" class="thumbnail" />
+			</a>
+		</div>
+	{/}{/}
+	</div>
+	<script type="text/javascript">
+		$("#{$_name} .brand-carousel").owlCarousel({
+			loop:true,
+			margin:30,
+			autoplay:true,
+			responsiveClass:true,
+			responsive:{
+				0:{
+					items:1,
+					nav:true,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
+				},
+				600:{
+					items:3,
+					nav:false,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
+				},
+				1000:{
+					items:5,
+					nav:true,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
+					loop:true
+				}
+			}
+		});
+	</script>
+</div>

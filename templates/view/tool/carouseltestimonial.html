@@ -1,0 +1,40 @@
+<div class="{$class} teachers-wrapper" id="{$_name}" style="{$style}">
+	{rows}{row}
+	<div class="teacher">
+    	<div class="teacher-thumb">
+        	<img src="{$file}" alt="{$title}" />
+        </div>
+        <div class="teacher-meta">
+        	<h3>{$title}</h3>
+            <p>{$description}</p>
+        </div>
+    </div>
+    {/}{/}
+
+	<script type="text/javascript">
+		$("#{$_name}.teachers-wrapper").owlCarousel({
+			loop:true,
+			margin:40,
+			responsiveClass:true,
+			autoplay:true,
+			responsive:{
+				0:{
+					items:1,
+					nav:true,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
+				},
+				600:{
+					items:3,
+					nav:false,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
+				},
+				1000:{
+					items:4,
+					nav:true,
+					navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
+					loop:true
+				}
+			}
+		});
+	</script>
+</div>
