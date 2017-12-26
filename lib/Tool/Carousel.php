@@ -4,8 +4,7 @@ namespace xavoc\formwala;
 
 class Tool_Carousel extends \xepan\cms\View_Tool{
 	public $options = [
-			'display_type'=>'slideshow',
-
+			'display_type'=>null
 		];
 
 	function init(){
@@ -17,6 +16,12 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 			$this->add('View')->set('Please Select Carousel Category');
 			return;
 		}
+
+		if(!$this->options['display_type']){
+			$this->add('View')->set('Please Select Display Type of Carousel');
+			return;
+		}
+		
 		$this->image_model = $this->add('xepan\cms\Model_CarouselImage');
 		$this->image_model->addCondition([['carousel_category_id',$this->options['carousel_category']],['carousel_category',$this->options['carousel_category']]]);
 		$this->image_model->setOrder('order','asc');
@@ -35,15 +40,19 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 	}
 
 	function slideShow(){
-
+			
 		$this->slide_effect = ['fadetotopfadefrombottom','zoomout','zoomin'];
 
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carousel']);
 		$carousel_cl->setModel($this->image_model);
 		
+		$this->js(true)->_css('revolution/css/settings');
+		$this->js(true)->_css('revolution/css/layers');
+		$this->js(true)->_css('revolution/css/navigation');
+
 		$this->app->jquery->addStaticInclude('revolution/js/jquery.themepunch.tools.min');
 		$this->app->jquery->addStaticInclude('revolution/js/jquery.themepunch.revolution.min');
-
+		
 		$this->slide_count = 0;
 		$carousel_cl->addHook('formatRow',function($l){
 			$l->current_row['file'] = './websites/'.$this->app->current_website_name."/".$l->model['file_id'];

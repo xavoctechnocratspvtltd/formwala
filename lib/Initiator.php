@@ -22,6 +22,13 @@ class Initiator extends \Controller_Addon {
     	return $this;
     }
 
+    function setup_pre_frontend(){
+        $this->routePages('xavoc_formwala');
+        $this->addLocation(array('template'=>'templates','js'=>'templates/js','css'=>['templates/css','templates/js']))
+        ->setBaseURL('./shared/apps/xavoc/formwala/');
+
+    }
+    
     function setup_frontend(){
         $this->routePages('xavoc_formwala');
         $this->addLocation(array('template'=>'templates','js'=>'templates/js','css'=>['templates/css','templates/js']))
