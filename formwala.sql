@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-12-22 16:19:49
+Date: 2018-01-17 13:08:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,9 +57,16 @@ CREATE TABLE `formwala_applicant` (
   `first_college_id` int(11) DEFAULT NULL,
   `secord_college_id` int(11) DEFAULT NULL,
   `third_college_id` int(11) DEFAULT NULL,
+  `father_contact_no` varchar(255) DEFAULT NULL,
+  `mother_contact_no` varchar(255) DEFAULT NULL,
+  `course_4` varchar(255) DEFAULT NULL,
+  `name_of_institute_4` varchar(255) DEFAULT NULL,
+  `board_university_4` varchar(255) DEFAULT NULL,
+  `year_4` int(11) DEFAULT NULL,
+  `percentage_of_marks_4` int(11) DEFAULT NULL,
+  `aadhar_no` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
 
 -- ----------------------------
 -- Table structure for `formwala_applicant_course_college_asso`
@@ -72,7 +79,8 @@ CREATE TABLE `formwala_applicant_course_college_asso` (
   `applicant_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+
 
 -- ----------------------------
 -- Table structure for `formwala_college_course_association`
@@ -84,7 +92,6 @@ CREATE TABLE `formwala_college_course_association` (
   `course_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
 
 -- ----------------------------
 -- Table structure for `formwala_course`
