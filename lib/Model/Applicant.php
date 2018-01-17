@@ -6,7 +6,7 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 
 	public $status = ['Active','InActive'];
 	public $actions = [
-					'Active'=> ['view','edit','delete','deactivate'],
+					'Active'=> ['view','selected_college','edit','delete','deactivate'],
 					'InActive'=> ['view','edit','delete','activate']
 					];
 
@@ -87,5 +87,12 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 
 	function beforeSave(){
 		if(!$this['first_name']) $this['first_name'] = "Guest";
+	}
+
+	function page_selected_college($page){
+		$model = $this->add('xavoc\formwala\Model_ApplicantCourseCollegeAssociation');
+		$model->addCondition('applicant_id',$this->id);
+		$crud = $page->add('xepan\base\CRUD');
+		$crud->setModel($model);
 	}
 }
