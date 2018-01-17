@@ -13,7 +13,7 @@ class page_configuration extends \xepan\base\Page{
 			'fields'=>[
 						'advertisement_slide_speed'=>'Line',
 						'testimonial_slide_speed'=>'Line',
-						'colleges_slide_speed'=>'Line',
+						// 'colleges_slide_speed'=>'Line',
 						'email_subject'=>'Line',
 						'email_body'=>'xepan\base\RichText'
 					],
