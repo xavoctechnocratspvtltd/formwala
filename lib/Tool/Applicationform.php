@@ -44,7 +44,7 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 			$active_step = 1;
 
 		// $pb = $this->add('xepan\epanservices\View_ProgressBar',['active_step'=>$active_step]);
-		$tab = $this->add('Tabs');
+		$this->tab = $tab = $this->add('Tabs');
 		$this->r_tab = $r_tab = $tab->addTab('Registration');
 		$this->t_tab = $t_tab = $tab->addTab('Write a Testimonial');
 
@@ -364,8 +364,8 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 	}
 
 	function linkDisplay(){
-		$this->add('View')->addClass('text-center heading')->setElement('h2')->set("Select Your Link");
-		$this->add('xavoc\formwala\Tool_Course',['options'=>['type'=>'link','redirect_to_original_link'=>1]]);
+		$this->r_tab->add('View')->addClass('text-center heading')->setElement('h2')->set("Select Your Link");
+		$this->r_tab->add('xavoc\formwala\Tool_Course',['options'=>['type'=>'link','redirect_to_original_link'=>1]]);
 	}
 
 
