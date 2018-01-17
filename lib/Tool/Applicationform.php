@@ -44,6 +44,9 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 			$active_step = 1;
 
 		// $pb = $this->add('xepan\epanservices\View_ProgressBar',['active_step'=>$active_step]);
+		$tab = $this->add('Tabs');
+		$this->r_tab = $r_tab = $tab->addTab('Registration');
+		$this->t_tab = $t_tab = $tab->addTab('Write a Testimonial');
 
 		switch ($active_step) {
 			case '1':
@@ -59,14 +62,53 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				$this->finalStep();
 				break;
 		}
+
+		$form = $this->t_tab->add('Form');
+		$form->addField('text','review')->validate('required');
+		$form->addSubmit('Submit New Review')->addClass('btn btn-primary');
+		$model_applicant = $this->r_tab->add('xavoc\formwala\Model_Applicant');
+		$model_applicant->loadLoggedIn();
+
+		$this->t_tab->add('View')->setHtml('<h3>Your Review History</h3>')->addClass('heading');
+		$grid = $this->t_tab->add('Grid');
+
+		if($form->isSubmitted()){
+			
+			$image_url = $model_applicant['image'];
+			$img_path = explode($this->app->current_website_name, $image_url)[1];
+			
+			$this->app->skipDefaultTemplateJsonUpdate = true;
+			$cat = $this->add('xepan\cms\Model_CarouselCategory');
+			$cat->addCondition('name','Testimonial');
+			$cat->tryLoadAny();
+			$cat->save();
+
+			$img = $this->add('xepan\cms\Model_CarouselImage');
+			$img['carousel_category_id'] = $cat->id;
+			$img['status'] = "Hidden";
+			$img['title'] = $model_applicant['first_name']." ".$model_applicant['last_name'];
+			$img['text_to_display'] = $form['review'];
+			$img['slide_type'] = "Image";
+			$img['created_by_id'] = $model_applicant['id'];
+			$img['file_id'] = $img_path;
+			$img->save();
+
+			$form->js(null,[$form->js()->reload(),$grid->js()->reload()])->univ()->successMessage('Your Review has been submitted successfully')->execute();
+		}
+
+		$review_model = $this->add('xepan\cms\Model_CarouselImage')->addCondition('created_by_id',$model_applicant->id);
+		$review_model->getElement('created_at')->caption('Date');
+		$review_model->setOrder('created_at','desc');
+		$grid->setModel($review_model,['created_at','text_to_display','status']);
+		$grid->addPaginator($ipp=5);
 	}
 
 	function applicantForm(){
-		$this->add('View')->setHtml('<div class="section-title-wrapper"><div class="section-title"><h2>Registration form</h2><ul><li>Please fill in the form & All fields are mandatory</li></ul></div></div>');
+		$this->r_tab->add('View')->setHtml('<div class="section-title-wrapper"><div class="section-title"><h2>Registration form</h2><ul><li>Please fill in the form & (*) mark fields are mandatory</li></ul></div></div>');
 
-		$model_applicant = $this->add('xavoc\formwala\Model_Applicant');
+		$model_applicant = $this->r_tab->add('xavoc\formwala\Model_Applicant');
 		if(!$model_applicant->loadLoggedIn()){
-			$this->add('View')->addClass('alert alert-warning')->set('Applicant is not logged in');
+			$this->r_tab->add('View')->addClass('alert alert-warning')->set('Applicant is not logged in');
 			return;
 		}
 
@@ -78,28 +120,29 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		$model_applicant->getElement('updated_at')->system(true);
 		$model_applicant->getElement('organization')->system(true);
 
-		$form = $this->add('Form');
+		$form = $this->r_tab->add('Form');
 		$form->add('xepan\base\Controller_FLC')
 			->makePanelsCoppalsible(true)
 			->showLables(true)
 			->addContentSpot()
 			->layout([
-				'first_name'=>'Personal Information~c1~4',
+				'first_name~First Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Personal Information~c1~4',
 				'middle_name'=>'c2~4',
-				'last_name'=>'c3~4',
-				'image_id~Profile Picture'=>'c4~4',
+				'last_name~Last Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c3~4',
+				'image_id~Profile Picture &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c4~4',
 				'mobile_no'=>'c5~4',
-				'dob'=>'c5~4',
+				'dob~DOB &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c5~4',
 				'blood_group'=>'c5~4',
-				'email_id'=>'c6~4',
-				'gender'=>'c6~4',
-				'marital_status'=>'c6~4',
+				'email_id~Email Id &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'gender~Gender &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'marital_status~Marital Status &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'aadhar_no'=>'c5~4',
 				
-				'country_id~Country'=>'Permanent Address~c11~4',
-				'state_id~State'=>'c12~4',
-				'city'=>'c13~4',
-				'address'=>'c14~8',
-				'pin_code'=>'c15~4',
+				'country_id~Country &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Permanent Address~c11~4',
+				'state_id~State &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c12~4',
+				'city~City &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c13~4',
+				'address~Address &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c14~8',
+				'pin_code~Pin Code &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c15~4',
 
 				// 'local_country_id~Country'=>'Local Address~c21~4',
 				// 'local_state_id~State'=>'c22~4',
@@ -107,10 +150,12 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				// 'local_address~Address'=>'c24~4',
 				// 'local_pin_code~Pin Code'=>'c25~4',
 				
-				'father_name'=>'Guardian Detail~c31~3',
-				'occupation_of_father'=>'c33~3',
-				'mother_name'=>'c32~3',
-				'occupation_of_mother'=>'c34~3',
+				'father_name~Father Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Guardian Detail~c31~4',
+				'father_contact_no~Father Contact No &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c32~4',
+				'occupation_of_father'=>'c33~4',
+				'mother_name~Mother Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c34~4',
+				'mother_contact_no'=>'c35~4',
+				'occupation_of_mother'=>'c36~4',
 
 				'course_1~Course'=>'Educational Details~c41~2',
 				'name_of_institute_1~School / Institute'=>'c42~4',
@@ -129,13 +174,25 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				'board_university_3~Board / University'=>'c63~3',
 				'year_3~Year'=>'c64~1',
 				'percentage_of_marks_3~% of Marks'=>'c65~2',
+
+				'course_4~Course'=>'c71~2',
+				'name_of_institute_4~College / Institute'=>'c72~4',
+				'board_university_4~Board / University'=>'c73~3',
+				'year_4~Year'=>'c74~1',
+				'percentage_of_marks_4~% of Marks'=>'c75~2',
 			]);
 
 		$form->setModel($model_applicant);
 
+		if($model_applicant['first_name'] == "Guest"){
+			$form->getElement('first_name')->set("");
+		}
+
+		$form->getElement('mobile_no')->setAttr('disabled');
 		$form->getElement('course_1')->set('10th')->setAttr('disabled');
 		$form->getElement('course_2')->set('12th')->setAttr('disabled');
 		$form->getElement('course_3')->set('Graduation')->setAttr('disabled');
+		$form->getElement('course_4')->set('Other')->setAttr('disabled');
 
 		$country_field = $form->getElement('country_id');
 		$state_field = $form->getElement('state_id');
@@ -148,7 +205,7 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 
 		$form->addSubmit('Submit')->addClass('btn btn-primary btn-block');
 		if($form->isSubmitted()){
-			$mandatory_field = ['first_name','last_name','image_id','mobile_no','email_id','dob','gender','marital_status','blood_group','country_id','state_id','city','address','pin_code','father_name','mother_name','occupation_of_father','occupation_of_mother','name_of_institute_1','board_university_1','year_1','percentage_of_marks_1','name_of_institute_2','board_university_2','year_2','percentage_of_marks_2','name_of_institute_3','board_university_3','year_3','percentage_of_marks_3'];
+			$mandatory_field = ['first_name','last_name','image_id','email_id','dob','gender','marital_status','country_id','state_id','city','address','pin_code','father_name','father_contact_no','mother_name'];
 
 			foreach ($mandatory_field as $key => $field) {
 				if(!trim($form[$field])) $form->error($field, $field.' must not be empty');
@@ -156,16 +213,14 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				if( !filter_var($form['email_id'], FILTER_VALIDATE_EMAIL)){
 		            return $form->error('email_id','Must be a valid email address');
 		        }
-
-		        // if($form[''])
 			}
-
-
+			
 			$form['course_1'] = '10th';
 			$form['course_2'] = '12th';
 			$form['course_3'] = 'Graduation';
+			$form['course_4'] = 'Other';
+			$form->save();
 
-			$form->model->save();
 			$form->js()->univ()->redirect($this->app->url(null,['step'=>2,'course'=>$this->course]))->execute();
 		}
 
@@ -173,15 +228,15 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 
 	function collegeSelectionForm(){
 		
-		$this->add('View')->setHtml('<div class="section-title-wrapper"><div class="section-title"><h2>Select College </h2></div></div>');
+		$this->r_tab->add('View')->setHtml('<div class="section-title-wrapper"><div class="section-title"><h2>Select College </h2></div></div>');
 
-		$applicant = $this->add('xavoc\formwala\Model_Applicant');
+		$applicant = $this->r_tab->add('xavoc\formwala\Model_Applicant');
 		if(!$applicant->loadLoggedIn()){
-			$this->add('View')->addClass('alert alert-warning')->set('Applicant is not logged in');
+			$this->r_tab->add('View')->addClass('alert alert-warning')->set('Applicant is not logged in');
 			return;
 		}
 		if(!$this->course){
-			$this->add('View')->addClass('alert alert-warning')->set('course not selected');
+			$this->r_tab->add('View')->addClass('alert alert-warning')->set('course not selected');
 			return;
 		}
 		
@@ -195,8 +250,9 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		if(is_array($associated_college) && count($associated_college)){
 			$clg->addCondition('id','in',$associated_college);
 		}
-		
-		$form = $this->add('Form');
+		$clg->setOrder('first_name','asc');
+
+		$form = $this->r_tab->add('Form');
 		$form->add('xepan\base\Controller_FLC')
 			->makePanelsCoppalsible(true)
 			->showLables(true)
@@ -238,8 +294,8 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 	}
 
 	function finalStep(){
-		$this->add('View')->set('Thank you')->addClass('alert alert-success');
-
+		$v = $this->r_tab->add('View')->setstyle('min-height','300px');
+		$v->add('View')->setHtml('<h4 class="text-center">Form has been submitted successfully. we will call back to you with in 2 days. <br/>Thank You Very Much</h4>')->addClass('alert alert-success');
 	}
 
 	function linkDisplay(){

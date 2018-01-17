@@ -25,6 +25,7 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		$this->image_model = $this->add('xepan\cms\Model_CarouselImage');
 		$this->image_model->addCondition([['carousel_category_id',$this->options['carousel_category']],['carousel_category',$this->options['carousel_category']]]);
 		$this->image_model->setOrder('order','asc');
+		$this->image_model->addCondition('status','Visible');
 		
 		switch ($this->options['display_type']) {
 				case 'slideshow':

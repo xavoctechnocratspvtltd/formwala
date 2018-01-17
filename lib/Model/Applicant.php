@@ -39,10 +39,13 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 		$stu_j->addField('gender')->enum(['Male','Female','Other']);
 		$stu_j->addField('marital_status')->enum(['single','married']);
 		$stu_j->addField('blood_group')->enum(['A+','A-','B+','B-','O+','O-','AB+','AB-']);
+		$stu_j->addField('aadhar_no');
 
 		$stu_j->addField('father_name');
-		$stu_j->addField('mother_name');
+		$stu_j->addField('father_contact_no')->type('int');
 		$stu_j->addField('occupation_of_father');
+		$stu_j->addField('mother_name');
+		$stu_j->addField('mother_contact_no');
 		$stu_j->addField('occupation_of_mother');
 
 		// educational detail 
@@ -50,22 +53,29 @@ class Model_Applicant extends \xepan\base\Model_Contact{
 		$stu_j->addField('course_1')->caption('Course')->defaultValue('10');
 		$stu_j->addField('name_of_institute_1')->caption('Education Name of College / Institute');
 		$stu_j->addField('board_university_1')->caption('Board / University');
-		$stu_j->addField('year_1')->caption('Year')->type('int');
-		$stu_j->addField('percentage_of_marks_1')->caption('% of Marks')->type('int');
+		$stu_j->addField('year_1')->caption('Year');
+		$stu_j->addField('percentage_of_marks_1')->caption('% of Marks');
 
 		// 2
 		$stu_j->addField('course_2')->caption('Course')->defaultValue('12');
 		$stu_j->addField('name_of_institute_2')->caption('Education Name of College / Institute');
 		$stu_j->addField('board_university_2')->caption('Board / University');
-		$stu_j->addField('year_2')->caption('Year')->type('int');
-		$stu_j->addField('percentage_of_marks_2')->caption('% of Marks')->type('int');
+		$stu_j->addField('year_2')->caption('Year');
+		$stu_j->addField('percentage_of_marks_2')->caption('% of Marks');
 
 		// 3
 		$stu_j->addField('course_3')->caption('Course')->defaultValue('Gradutation');
 		$stu_j->addField('name_of_institute_3')->caption('Education Name of College / Institute');
 		$stu_j->addField('board_university_3')->caption('Board / University');
-		$stu_j->addField('year_3')->caption('Year')->type('int');
-		$stu_j->addField('percentage_of_marks_3')->caption('% of Marks')->type('int');
+		$stu_j->addField('year_3')->caption('Year');
+		$stu_j->addField('percentage_of_marks_3')->caption('% of Marks');
+
+		// other
+		$stu_j->addField('course_4')->caption('Course')->defaultValue('Other');
+		$stu_j->addField('name_of_institute_4')->caption('Education Name of College / Institute');
+		$stu_j->addField('board_university_4')->caption('Board / University');
+		$stu_j->addField('year_4')->caption('Year');
+		$stu_j->addField('percentage_of_marks_4')->caption('% of Marks');
 
 		$this->getElement('address')->caption('Permanent Address');
 		$this->getElement('status')->defaultValue('Active');
