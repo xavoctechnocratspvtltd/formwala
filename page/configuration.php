@@ -15,7 +15,8 @@ class page_configuration extends \xepan\base\Page{
 						'testimonial_slide_speed'=>'Line',
 						// 'colleges_slide_speed'=>'Line',
 						'email_subject'=>'Line',
-						'email_body'=>'xepan\base\RichText'
+						'email_body'=>'xepan\base\RichText',
+						'send_email'=>'checkbox'
 					],
 				'config_key'=>'FORMWALA_CONFIGURATION',
 				'application'=>'formwala'
@@ -25,9 +26,14 @@ class page_configuration extends \xepan\base\Page{
 		$m = $this->add('xavoc\formwala\Model_Applicant');
 		$detail_hint = "";
 		foreach ($m->getActualFields() as $key => $fields) {
-			$detail_hint .= '{'.$fields.'},';
+			$detail_hint .= '{$'.$fields.'},';
 		}
 
+		$detail_hint .= "<br/>";
+		$m = $this->add('xavoc\formwala\Model_ApplicantCourseCollegeAssociation');
+		foreach ($m->getActualFields() as $key => $fields) {
+			$detail_hint .= '{$'.$fields.'},';
+		}
 
 		$form = $this->add('Form');
 		$form->add('xepan\base\Controller_FLC')
@@ -39,9 +45,10 @@ class page_configuration extends \xepan\base\Page{
 				'testimonial_slide_speed'=>'c2~4~Speed in millisecond',
 				'colleges_slide_speed'=>'c3~4~Speed in millisecond',
 				'email_subject'=>'Email Content send to college~c4~12',
-				'email_body'=> 'c5~12'
+				'email_body'=> 'c5~12',
+				'send_email'=>'c6~12'
 			]);
-		$form->add('View')->set($detail_hint);
+		$form->add('View')->setHtml($detail_hint);
 		$form->setModel($config_m);
 		$form->addSubmit('Save')->addClass('btn btn-primary');
 		if($form->isSubmitted()){

@@ -286,8 +286,72 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				$asso['applicant_id'] = $applicant->id;
 				$asso['course_id'] = $this->course;
 				$asso->save();
-			}
 
+				// send email to College List
+				$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+				[
+					'fields'=>[
+								'advertisement_slide_speed'=>'Line',
+								'testimonial_slide_speed'=>'Line',
+								'email_subject'=>'Line',
+								'email_body'=>'xepan\base\RichText',
+								'send_email'=>'checkbox'
+							],
+						'config_key'=>'FORMWALA_CONFIGURATION',
+						'application'=>'formwala'
+				]);
+
+				$config_m->tryLoadAny();
+				
+				if($config_m['send_email'] != "1"){
+					continue;
+				} 
+
+				$clg = $this->add('xavoc\formwala\Model_College');
+				$clg->addCondition('id',$asso['college_id']);
+				$clg->tryLoadAny();
+				if(!$clg->loaded()) {
+					continue;
+				}
+
+				if(!$clg['emails_str']){
+					continue;
+				}
+
+				$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+				$email_setting->tryLoadAny();
+				if(!$email_setting->loaded()){
+					continue;
+				}
+
+				$to_emails = explode("<br/>", trim($clg['emails_str']));
+
+				$temp = $applicant->data;
+				$data = array_merge($temp,$asso->data);
+
+				$email_body = $config_m['email_body'];
+				$layout = $this->add('GiTemplate');
+				$layout->loadTemplateFromString($email_body);
+				$view = $this->add('View',null,null,$layout);
+				$view->template->set($data);
+				$html = $view->getHTML();
+				
+				$communication = $this->add('xepan\communication\Model_Communication_Abstract_Email');
+				$communication->addCondition('communication_type','Email');
+
+				$communication->getElement('status')->defaultValue('Draft');
+				$communication['direction'] = 'Out';
+				$communication->setfrom($email_setting['from_email'],$email_setting['from_name']);
+				
+				foreach ($to_emails as $key => $value) {
+					$communication->addTo(trim($value));
+				}
+
+				$communication->setSubject($config_m['email_subject']);
+				$communication->setBody($html);
+				$communication->send($email_setting);
+			}
+			
 			$form->js()->univ()->redirect($this->app->url(null,['step'=>3,'course'=>$this->course]))->execute();
 		}		
 
@@ -296,6 +360,7 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 	function finalStep(){
 		$v = $this->r_tab->add('View')->setstyle('min-height','300px');
 		$v->add('View')->setHtml('<h4 class="text-center">Form has been submitted successfully. we will call back to you with in 2 days. <br/>Thank You Very Much</h4>')->addClass('alert alert-success');
+		
 	}
 
 	function linkDisplay(){
