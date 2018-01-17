@@ -45,6 +45,9 @@ class page_college extends \xepan\base\Page{
 		$country_field->js('change',$state_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$state_field->name]),'country_id'=>$country_field->js()->val()]));
 
 		if($crud->isEditing('add') OR $crud->isEditing('edit')){
+			$crud->form->getElement('email_id')->set(str_replace("<br/>", ",", $crud->model['emails_str']));
+			$crud->form->getElement('contact_no')->set($crud->model['contacts_comma_seperated']);
+
 			if($crud->form->isSubmitted()){
 				$form = $crud->form;
 
