@@ -18,6 +18,7 @@ class Initiator extends \Controller_Addon {
         $m->addItem(['Link','icon'=>' fa fa-cog'],'xavoc_formwala_link');
         $m->addItem(['College','icon'=>' fa fa-cog'],'xavoc_formwala_college');
         $m->addItem(['Applicant','icon'=>' fa fa-cog'],'xavoc_formwala_student');
+        $m->addItem(['Configuration','icon'=>' fa fa-cog'],'xavoc_formwala_configuration');
         
     	return $this;
     }

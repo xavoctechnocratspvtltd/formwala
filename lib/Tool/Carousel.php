@@ -27,6 +27,20 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		$this->image_model->setOrder('order','asc');
 		$this->image_model->addCondition('status','Visible');
 		
+		$this->config = $config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'advertisement_slide_speed'=>'Line',
+						'testimonial_slide_speed'=>'Line',
+						'colleges_slide_speed'=>'Line',
+						'email_subject'=>'Line',
+						'email_body'=>'xepan\base\RichText'
+					],
+				'config_key'=>'FORMWALA_CONFIGURATION',
+				'application'=>'formwala'
+		]);
+		$config_m->tryLoadAny();
+
 		switch ($this->options['display_type']) {
 				case 'slideshow':
 					$this->slideShow();
@@ -46,7 +60,7 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carousel']);
 		$carousel_cl->setModel($this->image_model);
-		
+
 		$this->js(true)->_css('revolution/css/settings');
 		$this->js(true)->_css('revolution/css/layers');
 		$this->js(true)->_css('revolution/css/navigation');
@@ -70,8 +84,10 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 
 		$this->app->jquery->addStaticInclude('owl.carousel.min');
 		$this->js(true)->_css('owl.carousel');
-
+		
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouselmulti']);
+		$carousel_cl->template->trySet('slide_speed',$this->config['advertisement_slide_speed']?:200);
+
 		$carousel_cl->setModel($this->image_model);
 
 		$carousel_cl->addHook('formatRow',function($l){
@@ -86,6 +102,7 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouseltestimonial']);
 		$carousel_cl->setModel($this->image_model);
+		$carousel_cl->template->trySet('slide_speed',$this->config['testimonial_slide_speed']?:1000);
 
 		$carousel_cl->addHook('formatRow',function($l){
 			$l->current_row['file'] = './websites/'.$this->app->current_website_name."/".$l->model['file_id'];
