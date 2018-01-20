@@ -193,6 +193,9 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		$form->getElement('course_2')->set('12th')->setAttr('disabled');
 		$form->getElement('course_3')->set('Graduation')->setAttr('disabled');
 		$form->getElement('course_4')->set('Other')->setAttr('disabled');
+		$img_field = $form->getElement('image_id');
+		$img_field->setFormatFilesTemplate('view/fileupload');
+
 
 		$country_field = $form->getElement('country_id');
 		$state_field = $form->getElement('state_id');
