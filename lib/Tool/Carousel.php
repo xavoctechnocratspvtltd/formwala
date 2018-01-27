@@ -86,7 +86,7 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		$this->js(true)->_css('owl.carousel');
 		
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouselmulti']);
-		$carousel_cl->template->trySet('slide_speed',$this->config['advertisement_slide_speed']?:200);
+		$carousel_cl->template->trySet('slide_speed',(int)$this->config['colleges_slide_speed']?:200);
 
 		$carousel_cl->setModel($this->image_model);
 
@@ -97,12 +97,18 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 	}
 
 	function testimonial(){
+
+		$slide_speed = $this->config['testimonial_slide_speed']?:1000;
+		if($this->options['carousel_category'] == "Advertisement"){
+			$slide_speed = $this->config['advertisement_slide_speed']?:1000;
+		}
+
 		$this->js(true)->_css('owl.carousel');
 		$this->app->jquery->addStaticInclude('owl.carousel.min');
 		
 		$carousel_cl = $this->add('CompleteLister',null,null,['view\tool\carouseltestimonial']);
 		$carousel_cl->setModel($this->image_model);
-		$carousel_cl->template->trySet('slide_speed',$this->config['testimonial_slide_speed']?:1000);
+		$carousel_cl->template->trySet('slide_speed',(int)$slide_speed);
 
 		$carousel_cl->addHook('formatRow',function($l){
 			$l->current_row['file'] = './websites/'.$this->app->current_website_name."/".$l->model['file_id'];
