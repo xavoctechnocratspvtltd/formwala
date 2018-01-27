@@ -1,9 +1,12 @@
 <div class="{$class} teachers-wrapper" id="{$_name}" style="{$style}">
 	{rows}{row}
 	<div class="teacher">
-    	<div class="teacher-thumb">
+    	<div class="teacher-thumb {$thumb_class}">
+    		{img_wrapper}
         	<img src="{$file}" alt="{$title}" />
+        	{/}
         </div>
+
         <div class="teacher-meta">
         	<h3>{$title}</h3>
             <p>{$description}</p>

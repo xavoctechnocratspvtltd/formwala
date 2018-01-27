@@ -111,6 +111,14 @@ class Tool_Carousel extends \xepan\cms\View_Tool{
 		$carousel_cl->template->trySet('slide_speed',(int)$slide_speed);
 
 		$carousel_cl->addHook('formatRow',function($l){
+			if($l->model['slide_type'] == "Video"){
+				$l->current_row_html['img_wrapper'] = $l->model['link'];
+				$l->current_row_html['thumb_class'] = "thumb-video";
+			}
+
+		});
+
+		$carousel_cl->addHook('formatRow',function($l){
 			$l->current_row['file'] = './websites/'.$this->app->current_website_name."/".$l->model['file_id'];
 			$l->current_row_html['description']	 = $l->model['text_to_display'];
 		});
