@@ -32,7 +32,7 @@ class Tool_Login extends \xepan\cms\View_Tool{
 		]);
 		$config_m->tryLoadAny();
 		
-		$otp = rand(1111,9999);
+		$otp = "";
 				
 		$otp_message = "{$otp}, this is Your OTP.";
 		if($config_m['otp_message'])
