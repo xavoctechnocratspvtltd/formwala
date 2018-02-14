@@ -27,13 +27,69 @@ class page_college extends \xepan\base\Page{
 				])
 				;
 		}
+
 		if($form = $crud->form){
 			$form->addField('email_id',null,'Email Ids')->setFieldHint("(,) comma seperated multiple value");
 			$form->addField('contact_no')->setFieldHint("(,) comma seperated multiple value");
 		}
+		$crud->addHook('formSubmit',function($c,$form_obj){
 
-		$crud->grid->addPaginator($ipp=25);
+			$contact_model = $form_obj->model;
+			$contact_model->set($form_obj->getAllFields());
+			$contact_model->save();
+
+			$form = $form_obj;
+				try{
+
+					if($form['email_id']){
+						$email = $this->add('xepan\base\Model_Contact_Email');
+						$email->addCondition('contact_id',$form->model->id);
+						$email->deleteAll();
+
+						$emails = explode(",", $form['email_id']);
+						foreach ($emails as $key => $value) {
+							$email = $this->add('xepan\base\Model_Contact_Email');
+							$email->addCondition('contact_id',$form->model->id);
+							$email->addCondition('value',trim($value));
+							$email->tryLoadAny();
+							
+							$email['head'] = "Official";
+							$email->saveAndUnload();
+						}
+					}
+
+					if($form['contact_no']){
+						$contacts = explode(",", $form['contact_no']);
+						$email = $this->add('xepan\base\Model_Contact_Phone');
+						$email->addCondition('contact_id',$form->model->id);
+						$email->deleteAll();
+						
+						foreach ($contacts as $key => $value) {
+							$email = $this->add('xepan\base\Model_Contact_Phone');
+							$email->addCondition('value',trim($value));
+							$email->addCondition('contact_id',$form->model->id);
+							$email->tryLoadAny();
+							
+							$email['head'] = "Official";
+							$email->saveAndUnload();
+						}
+					}
+
+				// $this->app->db->commit();
+			}catch(\Exception $e){
+				$contact_model->delete();
+				$this->api->db->rollback();
+				throw new \Exception($e->getMessage());
+				
+			}
+
+
+			
+			return true; // do not proceed with default crud form submit behaviour
+		});
+
 		$crud->setModel($model,['first_name','address','city','state_id','country_id','pin_code','contacts_str','emails_str']);
+		$crud->grid->addPaginator($ipp=25);
 		$crud->grid->removeAttachment();
 
 		$state_field = $crud->form->getElement('state_id');
@@ -48,37 +104,6 @@ class page_college extends \xepan\base\Page{
 		if($crud->isEditing('add') OR $crud->isEditing('edit')){
 			$crud->form->getElement('email_id')->set(str_replace("<br/>", ",", $crud->model['emails_str']));
 			$crud->form->getElement('contact_no')->set($crud->model['contacts_comma_seperated']);
-
-			if($crud->form->isSubmitted()){
-				$form = $crud->form;
-
-				if($form['email_id']){
-					$emails = explode(",", $form['email_id']);
-					foreach ($emails as $key => $value) {
-						$email = $this->add('xepan\base\Model_Contact_Email');
-						$email->addCondition('value',trim($value));
-						$email->addCondition('contact_id',$form->model->id);
-						$email->tryLoadAny();
-						
-						$email['head'] = "Official";
-						$email->saveAndUnload();
-					}
-				}
-
-				if($form['contact_no']){
-					$contacts = explode(",", $form['contact_no']);
-					foreach ($contacts as $key => $value) {
-						$email = $this->add('xepan\base\Model_Contact_Phone');
-						$email->addCondition('value',trim($value));
-						$email->addCondition('contact_id',$form->model->id);
-						$email->tryLoadAny();
-						
-						$email['head'] = "Official";
-						$email->saveAndUnload();
-					}
-				}
-
-			}
 		}
 	}	
 }
