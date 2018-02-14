@@ -16,7 +16,8 @@ class page_configuration extends \xepan\base\Page{
 						'colleges_slide_speed'=>'Line',
 						'email_subject'=>'Line',
 						'email_body'=>'xepan\base\RichText',
-						'send_email'=>'checkbox'
+						'send_email'=>'checkbox',
+						'otp_message'=>'text'
 					],
 				'config_key'=>'FORMWALA_CONFIGURATION',
 				'application'=>'formwala'
@@ -46,7 +47,8 @@ class page_configuration extends \xepan\base\Page{
 				'colleges_slide_speed'=>'c3~4~Speed in millisecond',
 				'email_subject'=>'Email Content send to college~c4~12',
 				'email_body'=> 'c5~12',
-				'send_email'=>'c6~12'
+				'send_email'=>'c6~12',
+				'otp_message'=>'OTP SMS Content~c11'
 			]);
 		$form->add('View')->setHtml($detail_hint);
 		$form->setModel($config_m);

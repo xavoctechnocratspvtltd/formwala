@@ -16,6 +16,26 @@ class Tool_Login extends \xepan\cms\View_Tool{
 		$mobile_no = $this->app->stickyGET('uid');
 		$course = $this->app->stickyGET('course');
 
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'advertisement_slide_speed'=>'Line',
+						'testimonial_slide_speed'=>'Line',
+						'colleges_slide_speed'=>'Line',
+						'email_subject'=>'Line',
+						'email_body'=>'xepan\base\RichText',
+						'send_email'=>'checkbox',
+						'otp_message'=>'text'
+					],
+				'config_key'=>'FORMWALA_CONFIGURATION',
+				'application'=>'formwala'
+		]);
+		$config_m->tryLoadAny();
+
+		$otp_message = "{$otp}, this is Your OTP.";
+		if($config_m['otp_message'])
+			$otp_message = $config_m['otp_message'];
+
 		if(!$is_otp_send){
 			$form = $this->add('Form');
 			$form->addField('Number','mobile_no');
@@ -45,7 +65,7 @@ class Tool_Login extends \xepan\cms\View_Tool{
 				$applicant->tryLoadAny();
 				$applicant->save();
 
-				$message = $this->app->getConfig('otpMessage','{$otp}, this is Your OTP.');
+				$message = $otp_message;
 				
 				if($message){
 					$temp = $this->add('GiTemplate');
@@ -97,7 +117,7 @@ class Tool_Login extends \xepan\cms\View_Tool{
 					$applicant->tryLoadAny();
 					$applicant->save();
 
-					$message = $this->app->getConfig('otpMessage','{$otp}, this is Your OTP.');
+					$message = $otp_message;
 				
 					if($message){
 						$temp = $this->add('GiTemplate');
