@@ -32,6 +32,7 @@ class page_college extends \xepan\base\Page{
 			$form->addField('contact_no')->setFieldHint("(,) comma seperated multiple value");
 		}
 
+		$crud->grid->addPaginator($ipp=25);
 		$crud->setModel($model,['first_name','address','city','state_id','country_id','pin_code','contacts_str','emails_str']);
 		$crud->grid->removeAttachment();
 
