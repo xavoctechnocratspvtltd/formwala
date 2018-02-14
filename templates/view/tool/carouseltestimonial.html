@@ -1,4 +1,6 @@
-<div class="{$class} teachers-wrapper" id="{$_name}" style="{$style}">
+<div class="{$class}" id="{$_name}" style="{$style}">
+
+	<div class="teachers-wrapper">
 	{rows}{row}
 	<div class="teacher">
     	<div class="teacher-thumb {$thumb_class}">
@@ -13,9 +15,10 @@
         </div>
     </div>
     {/}{/}
+	</div>
 
 	<script type="text/javascript">
-		$("#{$_name}.teachers-wrapper").owlCarousel({
+		$("#{$_name} .teachers-wrapper").owlCarousel({
 			loop:true,
 			margin:40,
 			responsiveClass:true,
@@ -41,6 +44,12 @@
 					loop:true
 				}
 			}
+		});
+
+		$(document).ready(function() {
+			$('#{$_name}.teachers-wrapper  .owl-item').each(function(event){
+				if(!$(this).child('.teacher')) $(this).remove();
+			});
 		});
 	</script>
 </div>
