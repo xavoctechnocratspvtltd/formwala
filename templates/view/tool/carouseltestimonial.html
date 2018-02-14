@@ -9,7 +9,7 @@
 
         <div class="teacher-meta">
         	<h3>{$title}</h3>
-            <p>{$description}</p>
+            <div>{$description}</div>
         </div>
     </div>
     {/}{/}
@@ -20,6 +20,7 @@
 			margin:40,
 			responsiveClass:true,
 			autoplay:true,
+			stagePadding:0,
 			autoplayTimeout:{$slide_speed},
 			autoplayHoverPause: true, // Stops autoplay
 			responsive:{
