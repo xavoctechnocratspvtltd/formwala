@@ -40,8 +40,18 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		// else show registration form
 
 		$active_step = $this->app->stickyGET('step');
-		if(!$active_step)
+		if(!$active_step){
+
 			$active_step = 1;
+			$course_asso_model = $this->add('xavoc\formwala\Model_ApplicantCourseCollegeAssociation');
+
+			$model_applicant = $this->add('xavoc\formwala\Model_Applicant');
+			if($model_applicant->loadLoggedIn()){
+				$course_asso_model->addCondition('applicant_id',$model_applicant->id);
+				if($course_asso_model->count()->getOne() > 0)
+					$active_step = 4;
+			}
+		}
 
 		// $pb = $this->add('xepan\epanservices\View_ProgressBar',['active_step'=>$active_step]);
 		$this->tab = $tab = $this->add('Tabs');
@@ -60,6 +70,9 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 				break;
 			case '3':
 				$this->finalStep();
+				break;
+			case '4':
+				$this->applicationView();
 				break;
 		}
 
@@ -101,6 +114,87 @@ class Tool_Applicationform extends \xepan\cms\View_Tool{
 		$review_model->setOrder('created_at','desc');
 		$grid->setModel($review_model,['created_at','text_to_display','status']);
 		$grid->addPaginator($ipp=5);
+	}
+
+	function applicationView(){
+		$model = $this->add('xavoc\formwala\Model_Applicant');
+		if(!$model->loadLoggedIn()){
+			$this->add('View')->addClass('alert alert-warning')->set('Applicant is not logged in');
+			return;
+		}
+
+		$tab = $this->r_tab->add('Tabs');
+		$basic_tab = $tab->addTab('Basic Detail');
+		$college_tab = $tab->addTab('Selected College');
+
+		$v = $basic_tab->add('View');
+		$v->setModel($model);
+		$v->add('xepan\base\Controller_FLC')
+			->makePanelsCoppalsible(true)
+			->showLables(true)
+			->addContentSpot()
+			->layout([
+				'first_name~First Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Personal Information~c1~4',
+				'middle_name'=>'c2~4',
+				'last_name~Last Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c3~4',
+				'image_id~<img src="{$image}">'=>'c4~4',
+				'mobile_no'=>'c5~4',
+				'dob~DOB &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c5~4',
+				'blood_group'=>'c5~4',
+				'email_id~Email Id &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'gender~Gender &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'marital_status~Marital Status &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c6~4',
+				'aadhar_no'=>'c5~4',
+				
+				'country_id~Country &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Permanent Address~c11~4',
+				'state_id~State &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c12~4',
+				'city~City &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c13~4',
+				'address~Address &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c14~8',
+				'pin_code~Pin Code &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c15~4',
+
+				// 'local_country_id~Country'=>'Local Address~c21~4',
+				// 'local_state_id~State'=>'c22~4',
+				// 'local_city~City'=>'c23~4',
+				// 'local_address~Address'=>'c24~4',
+				// 'local_pin_code~Pin Code'=>'c25~4',
+				
+				'father_name~Father Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'Guardian Detail~c31~4',
+				'father_contact_no~Father Contact No &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c32~4',
+				'occupation_of_father'=>'c33~4',
+				'mother_name~Mother Name &nbsp;<i class="fa fa-asterisk formwala-mandatory"></i>'=>'c34~4',
+				'mother_contact_no'=>'c35~4',
+				'occupation_of_mother'=>'c36~4',
+
+				'course_1~Course'=>'Educational Details~c41~2',
+				'name_of_institute_1~School / Institute'=>'c42~4',
+				'board_university_1~Board / University'=>'c43~3',
+				'year_1~Year'=>'c44~1',
+				'percentage_of_marks_1~% of Marks'=>'c45~2',
+
+				'course_2~Course'=>'c51~2',
+				'name_of_institute_2~College / Institute'=>'c52~4',
+				'board_university_2~Board / University'=>'c53~3',
+				'year_2~Year'=>'c54~1',
+				'percentage_of_marks_2~% of Marks'=>'c55~2',
+
+				'course_3~Course'=>'c61~2',
+				'name_of_institute_3~College / Institute'=>'c62~4',
+				'board_university_3~Board / University'=>'c63~3',
+				'year_3~Year'=>'c64~1',
+				'percentage_of_marks_3~% of Marks'=>'c65~2',
+
+				'course_4~Course'=>'c71~2',
+				'name_of_institute_4~College / Institute'=>'c72~4',
+				'board_university_4~Board / University'=>'c73~3',
+				'year_4~Year'=>'c74~1',
+				'percentage_of_marks_4~% of Marks'=>'c75~2',
+			]);
+		$v->setModel($model);
+
+		$asso = $this->add('xavoc\formwala\Model_ApplicantCourseCollegeAssociation');
+		$asso->addCondition('applicant_id',$model->id);
+		$grid = $college_tab->add('Grid');
+		$grid->setModel($asso);
 	}
 
 	function applicantForm(){
